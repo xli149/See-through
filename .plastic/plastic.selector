@@ -1,0 +1,4 @@
+repository "TestHololensCoordinate@chrislixiaochen@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
