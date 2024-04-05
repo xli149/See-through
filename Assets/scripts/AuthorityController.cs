@@ -22,7 +22,7 @@ public class AuthorityController : NetworkBehaviour
         //Debug.Log("Client in Server: " + ClientCameraPosition + " , " + ClientCameraRotation);
 
         if (isServer && !isClient) {
-            Debug.Log("not local..");
+            //Debug.Log("not local..");
             
             return; }
 
@@ -63,8 +63,8 @@ public class AuthorityController : NetworkBehaviour
         var cubePosition = cube.transform.position;
         var cubeRotation = cube.transform.rotation;
 
-        Debug.Log("Client camera: transform: " + cameraPosition + ", " + cameraRotation);
-        Debug.Log("Cube client in server: " + cubePosition + ", " + cubeRotation);
+        //Debug.Log("Client camera: transform: " + cameraPosition + ", " + cameraRotation);
+        //Debug.Log("Cube client in server: " + cubePosition + ", " + cubeRotation);
 
     }
     [Command]  //called in client, run in server

@@ -10,9 +10,11 @@ using System.IO;
 using System.Text;
 using System.ComponentModel;
 using System.Net.Http;
+using System.IO.Compression;
 
-public class TestServer : MonoBehaviour { 
-    
+public class TestServer : MonoBehaviour
+{
+
 
     public int port = 12345;
     // public string debug_ip = "192.168.1.9";
@@ -55,18 +57,20 @@ public class TestServer : MonoBehaviour {
         material = new Material(Shader.Find("Standard"));
     }
 
-    public void Connet(){ 
+    public void Connet()
+    {
 
         Debug.Log("TEST");
 
 
-        if (socketThread != null) { 
-        
+        if (socketThread != null)
+        {
+
             if (socketThread.IsAlive)
             {
                 socketThread.Abort();
             }
-         
+
         }
 
         socketThread = new Thread(new ThreadStart(SocketLoop));
@@ -76,10 +80,13 @@ public class TestServer : MonoBehaviour {
         socketThread.Start();
     }
 
-    private void Update()
+    void Update()
     {
+
+        //Debug.Log("status of bconnect:");
         if (bConnected)
         {
+            //Debug.Log("receive message: " + ReceiveMessage().ToString());
             if (ReceiveMessage())
             {
 
@@ -92,7 +99,7 @@ public class TestServer : MonoBehaviour {
                 //}
                 //if (rectype == 0x02) // receive camera jpg
                 //{
-                    DecodeVideoMsg();
+                DecodeVideoMsg();
 
                 //}
 
@@ -110,15 +117,17 @@ public class TestServer : MonoBehaviour {
     }
 
 
-    bool ReceiveMessage() {
+    bool ReceiveMessage()
+    {
 
         int socket_buffer_len = socket.Available;
 
-        if (socket_buffer_len != 0) {
+        if (socket_buffer_len != 0)
+        {
             return true;
         }
         else { return false; }
-    
+
     }
 
     void SocketReadByteArray(out byte[] buf, int len)
@@ -128,7 +137,7 @@ public class TestServer : MonoBehaviour {
         int nBytesRead = 0;
         while (nBytesRead < nBytesToRead)
         {
-            Debug.Log("nBytesRead " + nBytesRead + "nBytesToRead " +  nBytesToRead);
+            Debug.Log("nBytesRead " + nBytesRead + "nBytesToRead " + nBytesToRead);
             nBytesRead += socket.GetStream().Read(buf, nBytesRead, Math.Min(nBytesToRead - nBytesRead, 64000));  // maximum UDP lenght is 64k
 
 
@@ -166,46 +175,60 @@ public class TestServer : MonoBehaviour {
     void DecodeVideoMsg()
     {
 
-
         NetworkStream stream = socket.GetStream();
         byte[] buffer = new byte[4];
         br = new BinaryReader(stream);
         int bytesRead = stream.Read(buffer, 0, buffer.Length);
         int receivedData = BitConverter.ToInt32(buffer, 0);
-        //print("msg length " + receivedData);
+        //Debug.Log("msg length " + receivedData);
         byte[] image = br.ReadBytes(receivedData);
 
+        byte[] imageData = Decompress(image);
         //Texture2D  receiveTexture = new Texture2D(width, height);
 
-        receiveTexture.LoadImage(image);
+        receiveTexture.LoadImage(imageData);
 
         //Material material = new Material(Shader.Find("Standard"));
         material.mainTexture = receiveTexture;
         Renderer renderer = imageDisplay.GetComponent<Renderer>();
         renderer.material = material;
 
-        
+
     }
 
 
-    int SocketReadInt() {
-        byte[] buf = new byte[4]; 
-        
+    private byte[] Decompress(byte[] data)
+    {
+        using (MemoryStream memoryStream = new MemoryStream(data))
+        using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+        using (MemoryStream decompressedStream = new MemoryStream())
+        {
+            gzipStream.CopyTo(decompressedStream);
+            return decompressedStream.ToArray();
+        }
+    }
+
+    int SocketReadInt()
+    {
+        byte[] buf = new byte[4];
+
         int len = 0;
 
-        while (len < 4) {
+        while (len < 4)
+        {
 
             len += socket.GetStream().Read(buf, len, 4 - len);
         }
 
         return BitConverter.ToInt32(buf, 0);
 
-    
+
     }
 
 
-    private void  SocketLoop() { 
-        
+    private void SocketLoop()
+    {
+
         if (socket != null)
         {
             socket.Close();
@@ -215,7 +238,7 @@ public class TestServer : MonoBehaviour {
         {
             Debug.Log("GETHERE");
             // socket = new TcpClient("192.168.1.9", 12345);
-            socket = new TcpClient("10.30.1.117", 12345);
+            socket = new TcpClient("10.30.1.132", 12345);
 
             //socket.Connect("192.168.1.7", 9999);
 
@@ -223,8 +246,9 @@ public class TestServer : MonoBehaviour {
             //socket.Connect(ipEndPoint);
             bConnected = socket.Connected;
             Debug.Log("Feedback Socket Connected: " + bConnected.ToString());
-        
-            while (bConnected) {
+
+            while (bConnected)
+            {
 
 
                 //NetworkStream stream = socket.GetStream();
@@ -276,8 +300,8 @@ public class TestServer : MonoBehaviour {
         {
             Debug.Log(e);
         }
-        
-    
+
+
     }
 
 

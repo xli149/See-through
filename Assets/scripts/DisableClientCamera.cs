@@ -162,11 +162,11 @@ public class DisableClientCamera : NetworkBehaviour
 
             //relativePosition = new Vector3(new_controlPoint.x, new_controlPoint.y, new_controlPoint.z);
 
-            Debug.Log("----Camera position: " + Camera.main.transform.position + "-------");
+            //Debug.Log("----Camera position: " + Camera.main.transform.position + "-------");
             var currentRotation = Camera.main.transform.rotation;
 
 
-            Debug.Log(" initialCameraRotation: " + initialCameraRotation + " currentRotation: " + currentRotation);
+            //Debug.Log(" initialCameraRotation: " + initialCameraRotation + " currentRotation: " + currentRotation);
 
             relativeRotation = Quaternion.Inverse(Camera.main.transform.rotation);
             var testRotation = Quaternion.Euler(10, 0, 0);
@@ -181,7 +181,7 @@ public class DisableClientCamera : NetworkBehaviour
             calculatedRotation2 = relativeRotation * imageTarget2.transform.rotation;
             //calculatedRotation =  imageTarget.transform.rotation;
             //calculatedRotation =  imageTarget2.transform.rotation;
-            Debug.Log("calm pos: " + Camera.main.transform.position);
+            //Debug.Log("calm pos: " + Camera.main.transform.position);
 
 
             //cube.transform.position = imageTarget.transform.position;
@@ -278,8 +278,8 @@ public class DisableClientCamera : NetworkBehaviour
             
         }
 
-        Debug.Log("imageTarget position: " + imageTarget.transform.position);
-        Debug.Log("calculated latest pose: " + calculatedPose + LatestPose +relativePosition);
+        //Debug.Log("imageTarget position: " + imageTarget.transform.position);
+        //Debug.Log("calculated latest pose: " + calculatedPose + LatestPose +relativePosition);
         //var calculateRot = relativeRotation;
         //cube.transform.position = calculatedPose;
         //cube.transform.rotation = calculateRot;
