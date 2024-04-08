@@ -8,7 +8,7 @@ Simply clone the project and add it to Unity Hub. If you encounter the MRTK sele
 
 In the Asset->Scene folder, locate "SimpleScene". Double-click to open it, and select the "NetworkManager" inside. Modify the "Network Address" property to the IP address of the remote PC.
 
-Modify line 241 in the "TestServer.cs" file to update the IP address in the TcpClient to your PC's address that with ECM camera (for some reason, assigning the address to a variable and passing it into TcpClient does not trigger the TCP connection).
+Modify line 241 in the "TestServer.cs" file to update the IP address in the TcpClient to your PC's address that connected to  ECM camera (for some reason, assigning the address to a variable and passing it into TcpClient does not trigger the TCP connection).
 
 To deploy on Hololens, first ceck if there are any warnings in Edit->XR Plug-in Management. If there are warnings, please click on "Fix All" to resolve them. Next, go to File->Build Settings and select the UWP Platform. Change the Architecture to ARM64-bit. In the "Build and Run" options, choose "Remote Device" and select "Release" for the Build Configuration.
 
